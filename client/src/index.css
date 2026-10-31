@@ -1,1 +1,60 @@
 @import "tailwindcss";
+
+/* Lets Tailwind's dark: prefix follow the "dark" class on <html> */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Light theme colors */
+:root {
+  --bg: #ffffff;
+  --fg: #0a0a0a;
+  --muted: #525252;
+  --line: #e5e5e5;
+  --surface: #fafafa;
+}
+
+/* Dark theme colors */
+.dark {
+  --bg: #0a0a0a;
+  --fg: #fafafa;
+  --muted: #a3a3a3;
+  --line: #262626;
+  --surface: #141414;
+}
+
+/* Turns the variables above into Tailwind classes:
+   bg-bg, text-fg, text-muted, border-line, bg-surface */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-surface: var(--surface);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Visible keyboard focus on everything clickable */
+  :focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
