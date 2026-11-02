@@ -1,7 +1,9 @@
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import About from './components/About'
+import Skills from './components/Skills'
 
-const placeholders = ['about', 'skills', 'projects', 'contact']
+const placeholders = ['projects', 'contact']
 
 function App() {
   return (
@@ -9,6 +11,8 @@ function App() {
       <Navbar />
       <main className="mx-auto w-full max-w-5xl px-6">
         <Hero />
+        <About />
+        <Skills />
 
         {placeholders.map((id) => (
           <section
