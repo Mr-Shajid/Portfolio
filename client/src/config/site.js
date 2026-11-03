@@ -19,7 +19,7 @@ export const site = {
     'I learn by building projects, reading error messages carefully, and improving things step by step. My goal is to start my career as an SQA or full-stack developer and keep growing from there.',
   ],
   aboutFacts: [
-    { label: 'Education', value: 'Computer Science & Engineering', institution: 'American International University-Bangladesh' },
+    { label: 'Education', value: 'B.Sc. in Computer Science and Engineering (CSE)', institution: 'American International University-Bangladesh' },
     { label: 'Focus', value: 'Full-stack development, software quality assurance' },
     { label: 'Main stack', value: 'MongoDB, Express, React, Node.js' },
     { label: 'Looking for', value: 'full-stack web developer roles' },
