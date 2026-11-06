@@ -1,8 +1,12 @@
-import { sampleProjects } from '../data/sampleProjects'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
-// Right now this returns local sample data.
-// In Phase 4 we will replace the body with a fetch() call to our Express API.
-// The rest of the app will not need to change.
 export async function getProjects() {
-  return sampleProjects
+  const response = await fetch(`${API_URL}/api/projects`)
+
+  if (!response.ok) {
+    throw new Error('Failed to load projects')
+  }
+
+  const body = await response.json()
+  return body.data
 }
