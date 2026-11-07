@@ -3,24 +3,29 @@ import mongoose from 'mongoose'
 import helmet from 'helmet'
 import cors from 'cors'
 import rateLimit from 'express-rate-limit'
+import { createSessionMiddleware } from './config/session.js'
 import projectRoutes from './routes/projectRoutes.js'
+import authRoutes from './routes/authRoutes.js'
+import adminProjectRoutes from './routes/adminProjectRoutes.js'
 import { notFound, errorHandler } from './middleware/errorHandler.js'
 
 const app = express()
 
-// Adds protective security headers
+// In production the server sits behind the host's proxy. This tells Express
+// to trust it, which secure cookies need. We will verify this at deployment.
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1)
+}
+
 app.use(helmet())
 
-// Only your own frontend may call this API from a browser.
-// If FRONTEND_URL is missing, cross-origin requests are refused entirely.
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || false,
-    credentials: true, // needed later for the admin login cookie
+    credentials: true, // lets the browser send the login cookie
   })
 )
 
-// General limit: 100 requests per 15 minutes per visitor
 app.use(
   '/api',
   rateLimit({
@@ -32,10 +37,9 @@ app.use(
   })
 )
 
-// Reads JSON bodies, capped at 10 kilobytes
 app.use(express.json({ limit: '10kb' }))
+app.use(createSessionMiddleware())
 
-// Health check: the app can be "ok" even if the database is down
 app.get('/api/health', (req, res) => {
   const dbConnected = mongoose.connection.readyState === 1
   res.json({
@@ -45,6 +49,8 @@ app.get('/api/health', (req, res) => {
 })
 
 app.use('/api/projects', projectRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/admin/projects', adminProjectRoutes)
 
 // These two must stay LAST
 app.use(notFound)

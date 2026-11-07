@@ -18,6 +18,11 @@ export function errorHandler(error, req, res, next) {
     return res.status(413).json({ message: 'Request body is too large' })
   }
 
+    // Missing or wrong CSRF token
+  if (error.code === 'EBADCSRFTOKEN' || error.statusCode === 403) {
+    return res.status(403).json({ message: 'Invalid or missing CSRF token' })
+  }
+
   // Mongoose validation failed (for example a bad URL or missing title)
   if (error.name === 'ValidationError') {
     const details = Object.values(error.errors).map((e) => e.message)
