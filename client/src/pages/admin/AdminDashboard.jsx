@@ -1,14 +1,21 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-import { listAdminProjects, updateAdminProject } from '../../api/adminProjects'
+import {
+  deleteAdminProject,
+  listAdminProjects,
+  updateAdminProject,
+} from '../../api/adminProjects'
 
 function AdminDashboard() {
   const { email, logout } = useAuth()
+  const location = useLocation()
   const [projects, setProjects] = useState([])
   const [status, setStatus] = useState('loading') // loading | error | ready
-  const [message, setMessage] = useState('')
+  // A message may arrive from the form page after saving
+  const [message, setMessage] = useState(location.state?.message || '')
   const [busyId, setBusyId] = useState('')
+  const [confirmId, setConfirmId] = useState('') // which row is asking "Delete?"
 
   useEffect(() => {
     let cancelled = false
@@ -28,24 +35,40 @@ function AdminDashboard() {
     }
   }, [])
 
-  // Flips "featured" or "published" for one project
   async function toggle(project, field) {
     setBusyId(project._id)
     setMessage('')
     try {
-      const updated = await updateAdminProject(project._id, {
-        [field]: !project[field],
-      })
+      const updated = await updateAdminProject(project._id, { [field]: !project[field] })
       setProjects((list) => list.map((p) => (p._id === updated._id ? updated : p)))
       setMessage(`Updated "${updated.title}".`)
     } catch (error) {
       if (error.status === 401) {
-        await logout() // session expired: back to the login page
+        await logout()
         return
       }
       setMessage(error.message)
     } finally {
       setBusyId('')
+    }
+  }
+
+  async function remove(project) {
+    setBusyId(project._id)
+    setMessage('')
+    try {
+      await deleteAdminProject(project._id)
+      setProjects((list) => list.filter((p) => p._id !== project._id))
+      setMessage(`Deleted "${project.title}".`)
+    } catch (error) {
+      if (error.status === 401) {
+        await logout()
+        return
+      }
+      setMessage(error.message)
+    } finally {
+      setBusyId('')
+      setConfirmId('')
     }
   }
 
@@ -62,6 +85,12 @@ function AdminDashboard() {
         </div>
         <div className="flex items-center gap-3">
           <Link to="/" className="text-sm text-muted hover:text-fg">View site</Link>
+          <Link
+            to="/admin/projects/new"
+            className="inline-flex h-9 items-center rounded-md bg-fg px-4 text-sm font-medium text-bg transition-opacity hover:opacity-85"
+          >
+            New project
+          </Link>
           <button type="button" onClick={logout} className={smallButton}>
             Log out
           </button>
@@ -76,18 +105,19 @@ function AdminDashboard() {
           <p className="text-sm text-muted">Projects could not be loaded. Please refresh.</p>
         )}
         {status === 'ready' && projects.length === 0 && (
-          <p className="text-sm text-muted">No projects yet.</p>
+          <p className="text-sm text-muted">No projects yet. Use "New project" to add one.</p>
         )}
 
         {status === 'ready' && projects.length > 0 && (
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[32rem] text-left text-sm">
+            <table className="w-full min-w-[40rem] text-left text-sm">
               <thead>
                 <tr className="border-b border-line font-mono text-xs uppercase tracking-widest text-muted">
                   <th className="py-3 pr-4 font-normal">Title</th>
                   <th className="py-3 pr-4 font-normal">Order</th>
                   <th className="py-3 pr-4 font-normal">Status</th>
                   <th className="py-3 pr-4 font-normal">Featured</th>
+                  <th className="py-3 font-normal">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,6 +144,33 @@ function AdminDashboard() {
                       >
                         {project.featured ? 'Yes (remove)' : 'No (feature)'}
                       </button>
+                    </td>
+                    <td className="py-3">
+                      {confirmId === project._id ? (
+                        <span className="flex items-center gap-2">
+                          <span className="text-xs">Delete this project?</span>
+                          <button
+                            type="button"
+                            disabled={busyId === project._id}
+                            onClick={() => remove(project)}
+                            className={`${smallButton} border-fg`}
+                          >
+                            Yes, delete
+                          </button>
+                          <button type="button" onClick={() => setConfirmId('')} className={smallButton}>
+                            Cancel
+                          </button>
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-2">
+                          <Link to={`/admin/projects/${project._id}/edit`} className={smallButton}>
+                            Edit
+                          </Link>
+                          <button type="button" onClick={() => setConfirmId(project._id)} className={smallButton}>
+                            Delete
+                          </button>
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
