@@ -8,6 +8,7 @@ import projectRoutes from './routes/projectRoutes.js'
 import authRoutes from './routes/authRoutes.js'
 import adminProjectRoutes from './routes/adminProjectRoutes.js'
 import { notFound, errorHandler } from './middleware/errorHandler.js'
+import githubRoutes from './routes/githubRoutes.js'
 
 const app = express()
 
@@ -51,6 +52,8 @@ app.get('/api/health', (req, res) => {
 app.use('/api/projects', projectRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/admin/projects', adminProjectRoutes)
+app.use('/api/github', githubRoutes)
+
 
 // These two must stay LAST
 app.use(notFound)

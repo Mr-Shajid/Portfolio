@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import SectionHeading from './SectionHeading'
 import ProjectCard from './ProjectCard'
 import { getProjects } from '../api/projects'
+import GitHubRepos from './GitHubRepos'
 
 function Projects() {
   const [projects, setProjects] = useState([])
@@ -58,6 +59,7 @@ function Projects() {
           </div>
         )}
       </div>
+      <GitHubRepos />
     </section>
   )
 }
