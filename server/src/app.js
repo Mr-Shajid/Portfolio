@@ -9,6 +9,7 @@ import authRoutes from './routes/authRoutes.js'
 import adminProjectRoutes from './routes/adminProjectRoutes.js'
 import { notFound, errorHandler } from './middleware/errorHandler.js'
 import githubRoutes from './routes/githubRoutes.js'
+import contactRoutes from './routes/contactRoutes.js'
 
 const app = express()
 
@@ -53,6 +54,7 @@ app.use('/api/projects', projectRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/admin/projects', adminProjectRoutes)
 app.use('/api/github', githubRoutes)
+app.use('/api/contact', contactRoutes)
 
 
 // These two must stay LAST
