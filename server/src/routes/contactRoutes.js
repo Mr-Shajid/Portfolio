@@ -5,7 +5,7 @@ import { sendContactMessage } from '../controllers/contactController.js'
 // 5 messages per hour per visitor
 const contactLimiter = rateLimit({
   windowMs: 60 * 60 * 1000,
-  limit: 5,
+  limit: Number(process.env.CONTACT_RATE_LIMIT_PER_HOUR) || 5,
   standardHeaders: 'draft-7',
   legacyHeaders: false,
   message: { message: 'Too many messages sent. Please try again later.' },
