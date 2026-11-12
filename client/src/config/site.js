@@ -10,7 +10,7 @@ export const site = {
 
   // Résumé settings
   resumeFile: '/Md-Shahriar-Chy-Shajid-CV.pdf',
-  resumeAvailable: false,
+  resumeAvailable: true,
 
   // About section 
   aboutParagraphs: [
