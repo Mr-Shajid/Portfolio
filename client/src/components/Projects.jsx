@@ -3,10 +3,12 @@ import SectionHeading from './SectionHeading'
 import ProjectCard from './ProjectCard'
 import { getProjects } from '../api/projects'
 import GitHubRepos from './GitHubRepos'
+import { useSlowLoading } from '../hooks/useSlowLoading'
 
 function Projects() {
   const [projects, setProjects] = useState([])
   const [status, setStatus] = useState('loading') // loading | error | ready
+  const slow = useSlowLoading(status === 'loading')
 
   useEffect(() => {
     let cancelled = false
@@ -37,8 +39,12 @@ function Projects() {
       <SectionHeading label="Projects" title="Selected work" />
 
       <div className="mt-10" aria-live="polite">
-        {status === 'loading' && (
-          <p className="text-sm text-muted">Loading projects...</p>
+                {status === 'loading' && (
+          <p className="text-sm text-muted">
+            Loading projects...
+            {slow &&
+              ' The server may be waking up after a quiet period. This can take up to a minute.'}
+          </p>
         )}
 
         {status === 'error' && (

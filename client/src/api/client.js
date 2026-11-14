@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
+import { API_URL } from './config'
 
 // The CSRF token is kept in memory only. We never store it anywhere permanent.
 let csrfToken = null

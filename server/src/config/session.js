@@ -19,12 +19,12 @@ export function createSessionMiddleware() {
       mongoUrl: process.env.MONGODB_URI,
       ttl: eightHours, // sessions expire after 8 hours
     }),
-    cookie: {
-      httpOnly: true, // JavaScript cannot read this cookie
+        cookie: {
+      httpOnly: true, 
       secure: isProduction, // HTTPS only in production
-      // Production will probably need 'none' for a cross-site frontend.
-      // We will verify this together at deployment.
-      sameSite: isProduction ? 'none' : 'lax',
+      // The browser only talks to the frontend address (it forwards /api),
+      // so the cookie is first-party and Lax is enough.
+      sameSite: 'lax',
       maxAge: eightHours * 1000,
     },
   })

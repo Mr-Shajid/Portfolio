@@ -3,6 +3,7 @@ import { ArrowUpRight } from 'lucide-react'
 import { getGithubRepos } from '../api/github'
 import { githubUrl } from '../config/site'
 import { isSafeUrl } from '../utils/safeUrl'
+import { useSlowLoading } from '../hooks/useSlowLoading'
 
 function formatDate(value) {
   const date = new Date(value)
@@ -13,7 +14,7 @@ function formatDate(value) {
 function GitHubRepos() {
   const [repos, setRepos] = useState([])
   const [status, setStatus] = useState('loading') // loading | error | ready
-
+  const slow = useSlowLoading(status === 'loading')
   useEffect(() => {
     let cancelled = false
 
@@ -48,8 +49,12 @@ function GitHubRepos() {
       </div>
 
       <div className="mt-6" aria-live="polite">
-        {status === 'loading' && (
-          <p className="text-sm text-muted">Loading repositories...</p>
+               {status === 'loading' && (
+          <p className="text-sm text-muted">
+            Loading projects...
+            {slow &&
+              ' The server may be waking up after a quiet period. This can take up to a minute.'}
+          </p>
         )}
 
         {status === 'error' && (

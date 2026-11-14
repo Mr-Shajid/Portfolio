@@ -15,8 +15,9 @@ const app = express()
 
 // In production the server sits behind the host's proxy. This tells Express
 // to trust it, which secure cookies need. We will verify this at deployment.
-if (process.env.NODE_ENV === 'production') {
-  app.set('trust proxy', 1)
+const proxyHops = Number(process.env.TRUST_PROXY_HOPS)
+if (proxyHops > 0) {
+  app.set('trust proxy', proxyHops)
 }
 
 app.use(helmet())
