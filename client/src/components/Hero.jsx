@@ -10,7 +10,7 @@ function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-[80vh] scroll-mt-16 items-center border-b border-line py-20"
+      className="relative flex min-h-[80vh] scroll-mt-16 items-center border-b border-line py-10 sm:py-16 md:py-20"
     >
       {/* Faint dotted grid. Decorative only, so hidden from screen readers. */}
       <div

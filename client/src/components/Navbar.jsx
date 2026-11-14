@@ -1,11 +1,24 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ArrowUpRight, Menu, X } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
 import { site, githubUrl } from '../config/site'
 
+
 function Navbar() {
   // Controls whether the mobile menu is open
   const [menuOpen, setMenuOpen] = useState(false)
+
+    // Pressing Escape closes the open mobile menu
+  useEffect(() => {
+    if (!menuOpen) return
+
+    function onKeyDown(event) {
+      if (event.key === 'Escape') setMenuOpen(false)
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => document.removeEventListener('keydown', onKeyDown)
+  }, [menuOpen])
 
   const linkClass = 'text-sm text-muted transition-colors hover:text-fg'
 
@@ -57,7 +70,7 @@ function Navbar() {
             ) : (
               <Menu size={18} aria-hidden="true" />
             )}
-          </button>
+          </button>                
         </div>
       </nav>
 

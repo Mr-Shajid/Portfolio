@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
+import { usePageTitle } from '../hooks/usePageTitle'
 
 function NotFound() {
+  usePageTitle('Not Found | Md. Shahriar Chy Shajid ')
+
   return (
     <main className="flex min-h-screen items-center justify-center px-6">
       <div>

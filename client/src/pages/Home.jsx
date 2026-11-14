@@ -9,8 +9,15 @@ import Footer from '../components/Footer'
 function Home() {
   return (
     <>
+      {/* Invisible until a keyboard user tabs to it */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-fg focus:px-4 focus:py-2 focus:text-sm focus:text-bg"
+      >
+        Skip to main content
+      </a>
       <Navbar />
-      <main className="mx-auto w-full max-w-5xl px-6">
+      <main id="main" tabIndex={-1} className="mx-auto w-full max-w-5xl px-6 focus:outline-none">
         <Hero />
         <About />
         <Skills />

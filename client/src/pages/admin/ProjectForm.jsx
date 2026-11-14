@@ -221,7 +221,7 @@ function ProjectForm() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl px-6 py-10">
+    <main className="mx-auto w-full max-w-2xl px-6 py-10">
       <Link to="/admin" className="text-sm text-muted hover:text-fg">Back to dashboard</Link>
       <h1 className="mt-4 text-2xl font-semibold tracking-tight">
         {isEdit ? 'Edit project' : 'New project'}
@@ -305,7 +305,7 @@ function ProjectForm() {
           )}
         </div>
       </form>
-    </div>
+    </main>
   )
 }
 
