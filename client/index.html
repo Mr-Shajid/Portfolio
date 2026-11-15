@@ -10,14 +10,17 @@
       name="description"
       content="Portfolio of Md. Shahriar Chy Shajid, a CSE graduate building web applications with a focus on software quality."
     />
+    <link rel="canonical" href="https://portfolio-seven-ecru-pjypgstth7.vercel.app/" />
 
-    <!-- Open Graph: how the link appears when shared -->
+    <!-- Open Graph and Twitter: how the link appears when shared -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://portfolio-seven-ecru-pjypgstth7.vercel.app/" />
     <meta property="og:title" content="Md. Shahriar Chy Shajid | Portfolio" />
     <meta
       property="og:description"
       content="Software Quality Assurance & Full-Stack Developer. Projects, skills and contact."
     />
+    <meta name="twitter:card" content="summary" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,18 +29,7 @@
       rel="stylesheet"
     />
 
-    <script>
-      // Runs before the page is drawn, so the wrong theme never flashes.
-      (function () {
-        try {
-          var saved = localStorage.getItem('theme')
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-          if (saved === 'dark' || (!saved && prefersDark)) {
-            document.documentElement.classList.add('dark')
-          }
-        } catch (e) {}
-      })()
-    </script>
+    <script src="/theme-init.js"></script>
   </head>
   <body>
     <div id="root"></div>
