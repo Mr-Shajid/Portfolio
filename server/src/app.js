@@ -29,6 +29,11 @@ app.use(
   })
 )
 
+app.use('/api', (req, res, next) => {
+  res.set('Cache-Control', 'no-store')
+  next()
+})
+
 app.use(
   '/api',
   rateLimit({

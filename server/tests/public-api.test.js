@@ -92,3 +92,8 @@ test('CORS only allows the configured frontend origin', async () => {
   assert.notEqual(allowed, 'https://evil.example')
   assert.equal(res.headers['access-control-allow-credentials'], 'true')
 })
+
+test('API responses are marked as not cacheable', async () => {
+  const res = await request(app).get('/api/projects')
+  assert.equal(res.headers['cache-control'], 'no-store')
+})
