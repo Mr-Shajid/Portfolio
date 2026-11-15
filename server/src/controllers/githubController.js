@@ -13,17 +13,41 @@ async function fetchRepos(username) {
       `https://api.github.com/users/${encodeURIComponent(username)}/repos` +
       '?type=owner&sort=updated&per_page=30'
 
-    const response = await fetch(url, {
-      headers: {
-        Accept: 'application/vnd.github+json',
-        'User-Agent': 'portfolio-site', // GitHub requires a User-Agent
-        'X-GitHub-Api-Version': '2022-11-28',
-      },
-      signal: controller.signal,
-    })
+    const baseHeaders = {
+      Accept: 'application/vnd.github+json',
+      'User-Agent': 'portfolio-site', // GitHub requires a User-Agent
+      'X-GitHub-Api-Version': '2022-11-28',
+    }
+
+    // Optional token: gives a much higher rate limit. It stays on the server.
+    const token = process.env.GITHUB_TOKEN
+
+    function request(useToken) {
+      return fetch(url, {
+        headers: useToken
+          ? { ...baseHeaders, Authorization: `Bearer ${token}` }
+          : baseHeaders,
+        signal: controller.signal,
+      })
+    }
+
+    let response = await request(Boolean(token))
+
+    // An expired or wrong token gets 401 even for public data.
+    // Fall back to anonymous access instead of failing.
+    if (response.status === 401 && token) {
+      console.error('GitHub rejected GITHUB_TOKEN (expired or invalid). Using anonymous access.')
+      response = await request(false)
+    }
 
     if (!response.ok) {
-      throw new Error(`GitHub responded with status ${response.status}`)
+      // Rate limit info helps diagnose 403 errors. It is not a secret.
+      const remaining = response.headers?.get?.('x-ratelimit-remaining')
+      const detail =
+        remaining !== null && remaining !== undefined
+          ? ` (rate limit remaining: ${remaining})`
+          : ''
+      throw new Error(`GitHub responded with status ${response.status}${detail}`)
     }
 
     const repos = await response.json()
