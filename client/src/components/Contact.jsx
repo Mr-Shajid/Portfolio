@@ -16,7 +16,7 @@ function Contact() {
       height="400"
       loading="lazy"
       decoding="async"
-      className="aspect-square w-full border border-line object-cover grayscale transition duration-300 group-hover:grayscale-0 group-focus-visible:grayscale-0"
+      className="aspect-square w-full border border-line object-cover grayscale-20 transition duration-300 group-hover:grayscale-0 group-focus-visible:grayscale-0"
     />
   )
 
