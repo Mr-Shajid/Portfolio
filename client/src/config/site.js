@@ -2,6 +2,13 @@ export const site = {
   name: 'Md. Shahriar Chy Shajid',
   githubUsername: 'Mr-Shajid',
 
+    // Profile photo 
+  photoFile: '/profile.jpg',
+  photoAvailable: true, // change to true once the file is in place
+
+  // Your public LinkedIn profile address. Leave empty to show the photo without a link.
+  linkedinUrl: 'https://www.linkedin.com/in/shahriar-shajid-b511ab255/',
+
   // Hero text 
   eyebrow: 'CSE Graduate',
   headline: 'Software Quality Assurance & Full-Stack Developer',
